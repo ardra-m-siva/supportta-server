@@ -13,4 +13,6 @@ router.put("/update",jwtMiddleware,multerMiddleware.single('profilePhoto'),userC
 
 router.delete('/remove',jwtMiddleware,userController.deleteUserController)
 
+router.post('/refresh-token',jwtMiddleware,userController.refreshTokenController)
+
 module.exports=router

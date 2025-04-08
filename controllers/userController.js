@@ -64,3 +64,18 @@ exports.deleteUserController = async (req, res) => {
         res.status(400).json(err)
     }
 }
+
+exports.refreshTokenController=async(req,res)=>{
+    const {refreshToken}=req.body
+    try{
+        if(refreshToken){
+            const decryptedRefreshToken=jwt.verify(refreshToken, process.env.JWTPASSWORD)
+            if(decryptedRefreshToken){
+                const newAccessToken=jwt.verify({userId:decryptedRefreshToken.userId}, process.env.JWTPASSWORD, { expiresIn: '15m' })
+                res.status(200).json({ accessToken: newAccessToken });
+            }
+        }
+    }catch(err){
+        res.status(403).json(err)
+    }
+}
