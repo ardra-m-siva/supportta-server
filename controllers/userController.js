@@ -30,6 +30,12 @@ exports.loginUserController = async (req, res) => {
             if (decryptedPassword) {
                 const token = jwt.sign({ userId: existingUser._id }, process.env.JWTPASSWORD, { expiresIn: '1h', notBefore: '0' })
                 const refreshToken = jwt.sign({ userId: existingUser._id }, process.env.JWTPASSWORD, { expiresIn: '7d', notBefore: '0' })
+                res.cookie('refreshToken', refreshToken, {
+                    httpOnly: true,         
+                    secure: false   ,          
+                    sameSite: 'Strict',    
+                    maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+                  });
                 res.status(200).json({ user: existingUser, accessToken: token, refreshToken })
             }
         } else {
@@ -67,7 +73,9 @@ exports.deleteUserController = async (req, res) => {
 
 exports.refreshTokenController = async (req, res) => {
     console.log("inside refreshTokenController");
-    const { refreshToken } = req.body
+    const refreshToken = req.cookies.refreshToken;
+    console.log(refreshToken);
+    
     try {
         if (refreshToken) {
             const decryptedRefreshToken = jwt.verify(refreshToken, process.env.JWTPASSWORD)
@@ -76,6 +84,8 @@ exports.refreshTokenController = async (req, res) => {
                 const newAccessToken = jwt.sign({ userId: decryptedRefreshToken.userId }, process.env.JWTPASSWORD, { expiresIn: '1h' })
                 res.status(200).json({ accessToken: newAccessToken });
             }
+        }else{
+            res.status(401).json("No refresh token found" )
         }
     } catch (err) {
         res.status(403).json(err)

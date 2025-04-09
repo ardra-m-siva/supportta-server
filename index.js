@@ -3,10 +3,12 @@ const cors=require('cors')
 require('dotenv').config()
 require('./databases/dbConnection')
 const router=require('./routes/router')
+const cookieParser = require('cookie-parser')
 
 const supporttaServer=express()
 supporttaServer.use(cors())
 supporttaServer.use(express.json())
+supporttaServer.use(cookieParser());
 supporttaServer.use(router)
 supporttaServer.use('/uploads',express.static('./uploads'))
 

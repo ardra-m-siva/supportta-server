@@ -104,11 +104,8 @@ Response: 200 OK - deleted User Details
 
 🔹 JWT Refresh Token Flow
 ---------------------------
-Endpoint: POST /refresh-token
+Endpoint: GET /refresh-token
 Body (JSON):
-{
-  "refreshToken": "refresh_token_here"
-}
 Response:
 {
   "accessToken": "new_access_token_here"

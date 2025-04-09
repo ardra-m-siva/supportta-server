@@ -20,7 +20,7 @@ router.put("/update",jwtMiddleware,multerMiddleware.single('profilePhoto'),userC
 router.delete('/remove',jwtMiddleware,userController.deleteUserController)
 
 // access token using refresh token - authorized user only
-router.post('/refresh-token',userController.refreshTokenController)
+router.get('/refresh-token',userController.refreshTokenController)
 
 // block user - authorized user only 
 router.put('/block-user',jwtMiddleware,userController.blockUserController)
