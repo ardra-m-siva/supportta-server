@@ -8,6 +8,7 @@ Database: MongoDB (Mongoose ODM)
 Authentication: JWT (Access + Refresh Tokens)
 Password Security: bcrypt.js
 Testing: Postman
+PORT:3000
 
 Clone the repo
 
@@ -41,6 +42,7 @@ Response: 200 OK
   "username": "John",
   "email": "john@example.com",
   "profilePhoto": ""
+  "blockedUsers":[]
 }
 
 🔹 Login User
@@ -52,8 +54,11 @@ Body:
 }
 Response: 200 OK
 {
-    "user": {...
-    "password": encryptedPassword
+    "user": {
+      ...,
+      "password": encryptedPassword,
+        "blockedUsers":[]
+      ...
      },
     "accessToken": "token_here",
      "refreshToken": "refresh_token_here"
@@ -117,6 +122,7 @@ Response: 200 OK
 🔹Fetch All Brands
 GET /all-brand
 Headers: Authorization: Bearer <accessToken>
+brandLogo:url of the logo
 Response: 200 OK
 [
   {
@@ -128,3 +134,31 @@ Response: 200 OK
   },
   ...
 ]
+
+🔹Add Products
+POST /add-product
+Headers: Authorization: Bearer <accessToken>
+productImage:url of the logo
+Body :
+{
+    "productName": "Sony Bravia",
+  "description": "Fully HD tv 32 Inch",
+  "price": 42000,
+  "category": "TV",
+  "brand": "Sony",
+  "productImage": "https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcRBqxELgjyadwJr6o92q2Pn7qq_Bpi7g0aEGUb69eCsp2Nva896xaPLBPqucVGCxCnQipYR4rSn23n3DPr4sus-BtFtrgtAOMWwUBD_nbb2Q553wYTkILBbHw",
+}
+Response : 200 OK
+{
+  "productName": "Sony Bravia",
+  "description": "Fully HD tv 32 Inch",
+  "price": 42000,
+  "category": "TV",
+  "brand": "Sony",
+  "productImage": "https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcRBqxELgjyadwJr6o92q2Pn7qq_Bpi7g0aEGUb69eCsp2Nva896xaPLBPqucVGCxCnQipYR4rSn23n3DPr4sus-BtFtrgtAOMWwUBD_nbb2Q553wYTkILBbHw",
+  "userId":"...",
+   "_id": "...",
+    "__v": 0
+}
+
+

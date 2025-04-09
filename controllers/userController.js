@@ -28,7 +28,7 @@ exports.loginUserController = async (req, res) => {
         if (existingUser) {
             const decryptedPassword = await bycrypt.compare(password, existingUser.password)
             if (decryptedPassword) {
-                const token = jwt.sign({ userId: existingUser._id }, process.env.JWTPASSWORD, { expiresIn: '15m', notBefore: '0' })
+                const token = jwt.sign({ userId: existingUser._id }, process.env.JWTPASSWORD, { expiresIn: '1h', notBefore: '0' })
                 const refreshToken = jwt.sign({ userId: existingUser._id }, process.env.JWTPASSWORD, { expiresIn: '7d', notBefore: '0' })
                 res.status(200).json({ user: existingUser, accessToken: token, refreshToken })
             }
@@ -74,7 +74,7 @@ exports.refreshTokenController=async(req,res)=>{
             const decryptedRefreshToken=jwt.verify(refreshToken,process.env.JWTPASSWORD)
             console.log(decryptedRefreshToken);
             if(decryptedRefreshToken){
-                const newAccessToken=jwt.sign({userId:decryptedRefreshToken.userId}, process.env.JWTPASSWORD, { expiresIn: '15m' })
+                const newAccessToken=jwt.sign({userId:decryptedRefreshToken.userId}, process.env.JWTPASSWORD, { expiresIn: '1h' })
                 res.status(200).json({ accessToken: newAccessToken });
             }
         }
@@ -82,3 +82,4 @@ exports.refreshTokenController=async(req,res)=>{
         res.status(403).json(err)
     }
 }
+

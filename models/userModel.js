@@ -15,8 +15,12 @@ const userSchema=mongoose.Schema({
     },
     profilePhoto:{
         type:String,
+    },
+    blockedUsers:{
+        type:[String]
     }
 })
+
 
 const users=mongoose.model("users",userSchema);
 module.exports=users
