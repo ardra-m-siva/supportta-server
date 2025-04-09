@@ -96,3 +96,35 @@ Response:
 {
   "accessToken": "new_access_token_here"
 }
+
+➕ Add Brand
+POST /add-brand
+Headers: Authorization: Bearer <accessToken>
+Body:
+{
+  "brandName": "Adidas",
+  "brandLogo": "https://example.com/adidas-logo.png",
+  "categories": ["Footwear", "Sportswear"]
+}
+
+Response: 200 OK
+{
+  "brandName": "Adidas",
+  "brandLogo": "https://example.com/adidas-logo.png",
+  "categories": ["Footwear", "Sportswear"]
+}
+
+🔹Fetch All Brands
+GET /all-brand
+Headers: Authorization: Bearer <accessToken>
+Response: 200 OK
+[
+  {
+    "_id": "abc123",
+    "brandName": "Adidas",
+    "brandLogo": "https://example.com/adidas-logo.png",
+    "categories": ["Footwear", "Sportswear"],
+    "__v": 0
+  },
+  ...
+]
