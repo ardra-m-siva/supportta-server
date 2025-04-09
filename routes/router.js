@@ -22,6 +22,13 @@ router.delete('/remove',jwtMiddleware,userController.deleteUserController)
 // access token using refresh token - authorized user only
 router.post('/refresh-token',userController.refreshTokenController)
 
+// block user - authorized user only 
+router.put('/block-user',jwtMiddleware,userController.blockUserController)
+
+// unblock user - authorized user only 
+router.put('/unblock-user',jwtMiddleware,userController.unblockUserController)
+
+
 // Brand Controller
 // add a new brand - authorized user only
 router.post('/add-brand',jwtMiddleware,brandsController.addBrandController)
@@ -38,5 +45,11 @@ router.put('/update-product/:id',jwtMiddleware,productController.updateProductCo
 
 // delete product - authorized user only - product added user only
 router.delete('/delete-product/:id',jwtMiddleware,productController.deleteProductController)
+
+// all products - authorized user only - of unblocked ones
+router.get('/all-products',jwtMiddleware,productController.getAllProductsController)
+
+// all products of the loggedin User- authorized user only 
+router.get('/my-products',jwtMiddleware,productController.getMyProductsController)
 
 module.exports=router

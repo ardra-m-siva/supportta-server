@@ -58,28 +58,69 @@ exports.editUserController = async (req, res) => {
 exports.deleteUserController = async (req, res) => {
     const userId = req.userId
     try {
-        const deletedUser = await users.findByIdAndDelete( {_id:userId} )
+        const deletedUser = await users.findByIdAndDelete({ _id: userId })
         res.status(200).json(deletedUser)
     } catch (err) {
         res.status(400).json(err)
     }
 }
 
-exports.refreshTokenController=async(req,res)=>{
+exports.refreshTokenController = async (req, res) => {
     console.log("inside refreshTokenController");
-    const {refreshToken} = req.body
-    
-    try{
-        if(refreshToken){
-            const decryptedRefreshToken=jwt.verify(refreshToken,process.env.JWTPASSWORD)
+    const { refreshToken } = req.body
+    try {
+        if (refreshToken) {
+            const decryptedRefreshToken = jwt.verify(refreshToken, process.env.JWTPASSWORD)
             console.log(decryptedRefreshToken);
-            if(decryptedRefreshToken){
-                const newAccessToken=jwt.sign({userId:decryptedRefreshToken.userId}, process.env.JWTPASSWORD, { expiresIn: '1h' })
+            if (decryptedRefreshToken) {
+                const newAccessToken = jwt.sign({ userId: decryptedRefreshToken.userId }, process.env.JWTPASSWORD, { expiresIn: '1h' })
                 res.status(200).json({ accessToken: newAccessToken });
             }
         }
-    }catch(err){
+    } catch (err) {
         res.status(403).json(err)
     }
 }
 
+exports.blockUserController = async (req, res) => {
+    const userId = req.userId
+    const { targetedUser } = req.body
+    try {
+        const existingUser = await users.findById({ _id: userId })
+        if (existingUser) {
+            if(existingUser.blockedUsers.includes(targetedUser)){
+                res.status(400).json("User already Blocked")
+            }else{
+                existingUser.blockedUsers.push(targetedUser);
+                await existingUser.save();
+                res.status(200).json(existingUser)
+            }
+        } else {
+            res.status(404).json("User Not Found")
+        }
+    } catch (err) {
+        res.status(500).json(err)
+    }
+}
+
+exports.unblockUserController = async (req, res) => {
+    const userId = req.userId
+    const { targetedUser } = req.body
+    try {
+        const existingUser = await users.findById({ _id: userId })
+        if (existingUser) {
+            if(existingUser.blockedUsers.includes(targetedUser)){
+                const unserUnblocked=await users.findByIdAndUpdate({_id:userId},{
+                    $pull:{blockedUsers:targetedUser}
+                },{new:true})
+                res.status(200).json(unserUnblocked)
+            }else{
+                res.status(400).json("User is not blocked")
+            }
+        } else {
+            res.status(404).json("User Not Found")
+        }
+    } catch (err) {
+        res.status(500).json(err)
+    }
+}
