@@ -10,7 +10,7 @@ A RESTful API built using **Express.js**, **MongoDB** (with Mongoose), **JWT** f
 - **Database**: MongoDB (Mongoose ODM)  
 - **Authentication**: JWT (Access + Refresh Tokens)  
 - **Password Security**: bcrypt.js  
-- **Testing**: Postman  
+- **Testing**: Postman  (while testing make sure the access token is pasted -which only have expire time 1 hour)
 - **Port**: 3000  
 
 ---
